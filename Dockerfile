@@ -1,13 +1,21 @@
-# Build stage
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:21-jdk AS base
 WORKDIR /app
-COPY . .
-RUN ./mvnw clean package -DskipTests
+COPY .mvn .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw -q -DskipTests dependency:go-offline
 
-# Runtime stage
-FROM eclipse-temurin:21-jre-alpine
+FROM base AS dev
+ENV PORT=8080
+COPY src src
+CMD ["./mvnw","spring-boot:run","-Dspring-boot.run.jvmArguments=-Dserver.port=${PORT} -Dspring.profiles.active=dev"]
+
+FROM base AS build
+COPY src src
+RUN ./mvnw -q -DskipTests package
+
+FROM eclipse-temurin:21-jre AS prod
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+ENV PORT=8080
+COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
-
+ENTRYPOINT ["java","-jar","/app/app.jar"]
