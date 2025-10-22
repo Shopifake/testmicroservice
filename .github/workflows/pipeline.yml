@@ -1,4 +1,4 @@
-name: Pipeline
+name: CI/CD
 
 on:
   push:
@@ -8,9 +8,13 @@ on:
 
 jobs:
   pipeline:
-    uses: hugobrun343/template-spring-micro-service-CI/.github/workflows/spring-boot-pipeline.yml@v1.0.0
-    with:
-      cd-branches: '["main"]'
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Spring Boot CI/CD
+        uses: hugobrun343/template-spring-micro-service-CI@v2.0.0
+        with:
+          java-version: '21'
+          cd-branches: '["main"]'
