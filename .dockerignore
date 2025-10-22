@@ -1,6 +1,27 @@
+# Build artifacts
 target/
+
+# Git
 .git/
 .gitignore
+
+# Documentation
 *.md
+HELP.md
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Maven wrapper (Windows)
 mvnw.cmd
 
