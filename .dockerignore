@@ -1,8 +1,6 @@
 target/
-.mvn/
 .git/
 .gitignore
 *.md
-mvnw
 mvnw.cmd
 
