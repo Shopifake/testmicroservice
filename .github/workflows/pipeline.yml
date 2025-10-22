@@ -18,3 +18,4 @@ jobs:
         with:
           java-version: '21'
           cd-branches: '["main"]'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
