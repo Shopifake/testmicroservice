@@ -8,7 +8,7 @@ on:
 
 jobs:
   pipeline:
-    uses: hugobrun343/template-spring-micro-service-CI/.github/workflows/spring-boot-pipeline.yml@main
+    uses: hugobrun343/template-spring-micro-service-CI/.github/workflows/spring-boot-pipeline.yml@v1.0.0
     with:
       cd-branches: '["main"]'
     secrets:
