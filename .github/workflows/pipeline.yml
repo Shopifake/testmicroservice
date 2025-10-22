@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   pipeline:
-    uses: hugobrun343/template-spring-micro-service-CI/.github/workflows/spring-boot-pipeline.yml@v1.0.1
+    uses: hugobrun343/spring-boot-ci-cd-workflow/.github/workflows/spring-boot-pipeline.yml@v1.0.0
     with:
       cd-branches: '["main"]'
     secrets:
