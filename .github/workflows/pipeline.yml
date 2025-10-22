@@ -1,0 +1,16 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  pipeline:
+    uses: hugobrun343/template-spring-micro-service-CI/.github/workflows/spring-boot-pipeline.yml@main
+    with:
+      cd-branches: '["main"]'
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+
