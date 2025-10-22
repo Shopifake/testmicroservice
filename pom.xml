@@ -77,7 +77,10 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>3.3.1</version>
 				<configuration>
-					<skip>true</skip>
+					<configLocation>sun_checks.xml</configLocation>
+					<propertyExpansion>checkstyle.suppressions.file=checkstyle-suppressions.xml</propertyExpansion>
+					<suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+					<failOnViolation>false</failOnViolation>
 				</configuration>
 			</plugin>
 		</plugins>
