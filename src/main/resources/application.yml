@@ -1,23 +1,35 @@
+# Base configuration - Common parameters for all profiles
+# Each profile will override what it needs
+
 spring:
   application:
-    name: gateway_service
-  cloud:
-    gateway:
-      server:
-        webmvc:
-          routes:
-            - id: events-service
-              uri: http://localhost:8091
-              predicates:
-                - Path=/events/**
-              filters:
-                - StripPrefix=1
+    name: microservice-template
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
 
 server:
   port: 8080
 
+# Actuator configuration
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    com.template.microservice: INFO

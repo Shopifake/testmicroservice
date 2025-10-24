@@ -1,19 +1,19 @@
 # Spring Boot Microservice Template
 
-A clean, production-ready Spring Boot microservice template with Spring Cloud Gateway, comprehensive CI/CD pipeline, and multiple environment profiles.
+A clean, production-ready Spring Boot microservice template with comprehensive CI/CD pipeline and multiple environment profiles.
 
 ## Features
 
 - **Spring Boot 3.5.6** with Java 21
-- **Spring Cloud Gateway** for API routing
-- **Actuator** for health checks and monitoring
+- **Spring Data JPA** for database access
+- **PostgreSQL** for production, **H2** for development/testing
 - **Flyway** for database migrations
-- **PostgreSQL** and **H2** database support
+- **Actuator** for health checks and monitoring
 - **Swagger/OpenAPI** documentation
 - **Lombok** for cleaner code
 - **Testcontainers** for integration testing
 - **Multi-stage Docker** build
-- **GitHub Actions** CI/CD pipeline
+- **GitHub Actions** CI/CD pipeline with Checkstyle, SpotBugs, JaCoCo
 - **Multiple profiles** (dev, test, staging, prod)
 
 ## Quick Start
@@ -25,9 +25,9 @@ A clean, production-ready Spring Boot microservice template with Spring Cloud Ga
    ```
 
 2. **Update configuration**:
-   - Copy `src/main/resources/env.properties.template` to `.env.properties.local`
+   - Copy `src/main/resources/env.properties.template` to `.env.properties`
    - Modify the environment variables as needed
-   - Update `application.yml` files for your specific services
+   - Update `pom.xml` with your project details (groupId, artifactId)
 
 3. **Run locally**:
    ```bash
@@ -37,21 +37,40 @@ A clean, production-ready Spring Boot microservice template with Spring Cloud Ga
 4. **Access endpoints**:
    - Health check: `http://localhost:8080/actuator/health`
    - API docs: `http://localhost:8080/swagger-ui.html`
+   - H2 Console (dev): `http://localhost:8080/h2-console`
 
 ## Environment Profiles
 
-- **dev**: Development with H2 database
-- **test**: Testing with H2 in-memory database
-- **staging**: Staging with PostgreSQL
-- **prod**: Production with PostgreSQL
+- **default**: Base configuration with H2 database
+- **dev**: Development with H2, detailed logging, hot reload
+- **test**: Testing with H2 in-memory, random port
+- **staging**: Staging with PostgreSQL, moderate logging
+- **prod**: Production with PostgreSQL, minimal logging, security hardened
+
+## Configuration
+
+Each profile can be configured via environment variables:
+
+```bash
+# Application
+APP_NAME=microservice-template
+PORT=8080
+
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=mydb
+DB_USERNAME=user
+DB_PASSWORD=password
+```
 
 ## CI/CD Pipeline
 
 The template includes a complete GitHub Actions pipeline with:
 - Linting (Checkstyle, SpotBugs)
 - Testing with coverage (JaCoCo)
-- Docker build and push
-- Multi-environment deployment
+- Docker build and push to GitHub Container Registry
+- Multi-environment deployment support
 
 ## Docker
 
@@ -60,5 +79,21 @@ The template includes a complete GitHub Actions pipeline with:
 docker build -t microservice-template .
 
 # Run
-docker run -p 8080:8080 microservice-template
+docker run -p 8080:8080 \
+  -e DB_HOST=postgres \
+  -e DB_NAME=mydb \
+  microservice-template
+```
+
+## Development
+
+```bash
+# Run tests
+./mvnw test
+
+# Run with specific profile
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Build
+./mvnw clean package
 ```

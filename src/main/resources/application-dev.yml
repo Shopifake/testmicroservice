@@ -1,25 +1,28 @@
+# Development profile
 spring:
   config:
-    import: ".env.properties"
-  application:
-    name: ${APP_NAME}
-  cloud:
-    gateway:
-      server:
-        webmvc:
-          routes:
-            - id: events_service
-              uri: ${EVENTS_SERVICE_URI}
-              predicates:
-                - Path=/events/**
-              filters:
-                - StripPrefix=1
+    import: .env.properties
+  
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: ${DB_DRIVER}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  
+  jpa:
+    database-platform: ${DB_DIALECT}
+    show-sql: true
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
 server:
   port: ${PORT}
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
+logging:
+  level:
+    root: INFO
+    com.template.microservice: DEBUG
+    org.hibernate.SQL: DEBUG

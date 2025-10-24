@@ -1,25 +1,28 @@
+# Test profile
 spring:
-  config:
-    import: ".env.properties"
-  application:
-    name: ${APP_NAME}
-  cloud:
-    gateway:
-      server:
-        webmvc:
-          routes:
-            - id: events_service
-              uri: ${EVENTS_SERVICE_URI}
-              predicates:
-                - Path=/events/**
-              filters:
-                - StripPrefix=1
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  
+  h2:
+    console:
+      enabled: false
+  
+  flyway:
+    enabled: false
 
 server:
-  port: ${PORT}
+  port: 0
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
+logging:
+  level:
+    root: WARN
+    com.template.microservice: INFO
