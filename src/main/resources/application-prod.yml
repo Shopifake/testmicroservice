@@ -1,0 +1,25 @@
+spring:
+  config:
+    import: ".env.properties"
+  application:
+    name: ${APP_NAME}
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: events_service
+              uri: ${EVENTS_SERVICE_URI}
+              predicates:
+                - Path=/events/**
+              filters:
+                - StripPrefix=1
+
+server:
+  port: ${PORT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
