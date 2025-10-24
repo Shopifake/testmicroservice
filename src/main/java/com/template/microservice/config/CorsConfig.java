@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Allows cross-origin requests based on the active profile.
  */
 @Configuration
-public final class CorsConfig implements WebMvcConfigurer {
+public class CorsConfig implements WebMvcConfigurer {
 
     /** Maximum age for CORS preflight cache in seconds. */
     private static final long CORS_MAX_AGE = 3600;
