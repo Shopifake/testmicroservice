@@ -48,7 +48,6 @@ cp src/main/resources/env.dev.properties.template src/main/resources/.env.proper
 |---------|----------|------|---------|----------|
 | **dev** | H2 | `*` | DEBUG | Local development |
 | **test** | H2 memory | `*` | WARN | Unit/Integration tests |
-| **staging** | PostgreSQL | Strict | WARN | Pre-production |
 | **prod** | PostgreSQL | Strict | WARN | Production |
 
 ## Configuration
@@ -59,7 +58,7 @@ cp src/main/resources/env.dev.properties.template src/main/resources/.env.proper
 - Copy `env.dev.properties.template` to `.env.properties`
 - Uses H2 in-memory database
 
-**Staging/Production:**
+**Production:**
 - Environment variables injected via Kubernetes
 
 ### Key Variables
@@ -139,7 +138,7 @@ docker run -p 8080:8080 \
 
 ### Pipeline Includes
 
-- ✅ Linting (Checkstyle, SpotBugs)
+- ✅ Linting (Checkstyle)
 - ✅ Testing with coverage (JaCoCo)
 - ✅ Maven build
 - ✅ Docker build & push to GitHub Container Registry
@@ -163,7 +162,6 @@ src/main/
     ├── application.yml                     # Base config
     ├── application-dev.yml                 # Development
     ├── application-test.yml                # Testing
-    ├── application-staging.yml             # Staging
     ├── application-prod.yml                # Production
     ├── env.dev.properties.template         # Dev env template
     └── db/migration/

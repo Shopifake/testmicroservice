@@ -1,9 +1,2 @@
--- Flyway migration: Initial schema
--- Version: V1__Initial_schema.sql
-
--- Example table - remove or modify as needed
-CREATE TABLE example_table (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
+-- Initial migration: database schema creation
+-- This file serves as a starting point for Flyway migrations
