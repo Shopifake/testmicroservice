@@ -9,6 +9,10 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
 
 server:
   port: ${PORT}
@@ -29,7 +33,7 @@ management:
         include: health,info
   endpoint:
     health:
-      show-details: never
+      show-details: when-authorized
 
 logging:
   level:
