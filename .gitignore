@@ -4,16 +4,20 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# IDE
+# IDE - IntelliJ IDEA
 .idea/
 *.iws
 *.iml
 *.ipr
+out/
+
+# IDE - VS Code
 .vscode/
-.eclipse/
-.project
-.classpath
-.settings/
+*.code-workspace
+
+# IDE - Cursor
+.cursor/
+.cursorignore
 
 # OS
 .DS_Store
@@ -30,3 +34,17 @@ logs/
 
 # Coverage
 jacoco.exec
+.jacoco/
+
+# Environment files (NEVER commit credentials)
+.env
+.env.local
+.env.*.local
+*.env
+.env.properties
+!*.template
+
+# Database
+*.db
+*.sqlite
+*.h2.db

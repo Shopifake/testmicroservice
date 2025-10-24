@@ -3,7 +3,7 @@
 
 -- Example table - remove or modify as needed
 CREATE TABLE example_table (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

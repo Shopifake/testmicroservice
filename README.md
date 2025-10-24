@@ -7,7 +7,7 @@ A production-ready Spring Boot microservice template with CI/CD pipeline, multi-
 - **Spring Boot 3.5.6** with Java 21
 - **Spring Data JPA** + **Flyway** for database management
 - **PostgreSQL** (prod/staging) / **H2** (dev/test)
-- **Actuator** for health monitoring
+- **Actuator** + custom database health check
 - **Swagger/OpenAPI** for API documentation
 - **CORS** configured per environment
 - **Lombok** for cleaner code
@@ -53,13 +53,14 @@ cp src/main/resources/env.dev.properties.template src/main/resources/.env.proper
 
 ## Configuration
 
-### Environment Templates
+### Environment Configuration
 
-| File | Database | Use Case |
-|------|----------|----------|
-| `env.dev.properties.template` | H2 | Local development |
-| `env.staging.properties.template` | PostgreSQL | Staging |
-| `env.prod.properties.template` | PostgreSQL | Production |
+**Local Development:**
+- Copy `env.dev.properties.template` to `.env.properties`
+- Uses H2 in-memory database
+
+**Staging/Production:**
+- Environment variables injected via Kubernetes
 
 ### Key Variables
 
@@ -70,16 +71,32 @@ PORT=8080
 DB_URL=jdbc:h2:mem:testdb
 ```
 
-**Production:**
-```properties
-APP_NAME=microservice-template
-PORT=8080
-DB_HOST=prod-db.example.com
-DB_PORT=5432
-DB_NAME=microservice_prod
-DB_USERNAME=prod_user
-DB_PASSWORD=SECURE_PASSWORD
-CORS_ALLOWED_ORIGINS=https://prod-app.example.com
+**Production/Staging (Kubernetes):**
+```yaml
+# Example ConfigMap/Secrets
+env:
+  - name: PORT
+    value: "8080"
+  - name: DB_HOST
+    value: "postgres-service"
+  - name: DB_PORT
+    value: "5432"
+  - name: DB_NAME
+    value: "microservice_prod"
+  - name: DB_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret
+        key: username
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-secret
+        key: password
+  - name: CORS_ALLOWED_ORIGINS
+    value: "https://prod-app.example.com"
+  - name: CORS_ALLOW_CREDENTIALS
+    value: "true"
 ```
 
 ## Development
@@ -138,17 +155,17 @@ docker run -p 8080:8080 \
 src/main/
 ├── java/com/template/microservice/
 │   ├── MicroserviceApplication.java
-│   └── config/
-│       └── CorsConfig.java
+│   ├── config/
+│   │   └── CorsConfig.java
+│   └── health/
+│       └── DatabaseHealthIndicator.java
 └── resources/
     ├── application.yml                     # Base config
     ├── application-dev.yml                 # Development
     ├── application-test.yml                # Testing
     ├── application-staging.yml             # Staging
     ├── application-prod.yml                # Production
-    ├── env.dev.properties.template         # Dev env
-    ├── env.staging.properties.template     # Staging env
-    ├── env.prod.properties.template        # Prod env
+    ├── env.dev.properties.template         # Dev env template
     └── db/migration/
         └── V1__Initial_schema.sql          # Flyway migration
 ```
