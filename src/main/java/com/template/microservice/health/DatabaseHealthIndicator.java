@@ -19,7 +19,6 @@ public class DatabaseHealthIndicator implements HealthIndicator {
     private static final int CONNECTION_TIMEOUT = 3;
 
     /** DataSource to check. */
-    @SuppressWarnings("EI_EXPOSE_REP2") // SpotBugs: DataSource is Spring-managed, safe
     private final DataSource dataSource;
 
     /**
