@@ -22,6 +22,12 @@ spring:
 server:
   port: 0
 
+cors:
+  allowed-origins: "*"
+  allowed-methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+  allowed-headers: "*"
+  allow-credentials: false
+
 logging:
   level:
     root: WARN

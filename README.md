@@ -1,99 +1,154 @@
 # Spring Boot Microservice Template
 
-A clean, production-ready Spring Boot microservice template with comprehensive CI/CD pipeline and multiple environment profiles.
+A production-ready Spring Boot microservice template with CI/CD pipeline, multi-environment support, and security best practices.
 
 ## Features
 
 - **Spring Boot 3.5.6** with Java 21
-- **Spring Data JPA** for database access
-- **PostgreSQL** for production, **H2** for development/testing
-- **Flyway** for database migrations
-- **Actuator** for health checks and monitoring
-- **Swagger/OpenAPI** documentation
+- **Spring Data JPA** + **Flyway** for database management
+- **PostgreSQL** (prod/staging) / **H2** (dev/test)
+- **Actuator** for health monitoring
+- **Swagger/OpenAPI** for API documentation
+- **CORS** configured per environment
 - **Lombok** for cleaner code
 - **Testcontainers** for integration testing
+- **GitHub Actions** CI/CD with Checkstyle, SpotBugs, JaCoCo
 - **Multi-stage Docker** build
-- **GitHub Actions** CI/CD pipeline with Checkstyle, SpotBugs, JaCoCo
-- **Multiple profiles** (dev, test, staging, prod)
 
 ## Quick Start
 
-1. **Clone and customize**:
-   ```bash
-   git clone <this-repo>
-   cd microservice-template
-   ```
+### 1. Clone and Setup
 
-2. **Update configuration**:
-   - Copy `src/main/resources/env.properties.template` to `.env.properties`
-   - Modify the environment variables as needed
-   - Update `pom.xml` with your project details (groupId, artifactId)
+```bash
+git clone <this-repo>
+cd microservice-template
+cp src/main/resources/env.dev.properties.template src/main/resources/.env.properties
+```
 
-3. **Run locally**:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
+### 2. Customize
 
-4. **Access endpoints**:
-   - Health check: `http://localhost:8080/actuator/health`
-   - API docs: `http://localhost:8080/swagger-ui.html`
-   - H2 Console (dev): `http://localhost:8080/h2-console`
+- Update `pom.xml`: `groupId`, `artifactId`, `name`, `description`
+- Rename package from `com.template.microservice` to your own
+
+### 3. Run
+
+```bash
+./mvnw spring-boot:run
+```
+
+### 4. Access
+
+- Health: `http://localhost:8080/actuator/health`
+- Swagger: `http://localhost:8080/swagger-ui.html`
+- H2 Console: `http://localhost:8080/h2-console`
 
 ## Environment Profiles
 
-- **default**: Base configuration with H2 database
-- **dev**: Development with H2, detailed logging, hot reload
-- **test**: Testing with H2 in-memory, random port
-- **staging**: Staging with PostgreSQL, moderate logging
-- **prod**: Production with PostgreSQL, minimal logging, security hardened
+| Profile | Database | CORS | Logging | Use Case |
+|---------|----------|------|---------|----------|
+| **dev** | H2 | `*` | DEBUG | Local development |
+| **test** | H2 memory | `*` | WARN | Unit/Integration tests |
+| **staging** | PostgreSQL | Strict | WARN | Pre-production |
+| **prod** | PostgreSQL | Strict | WARN | Production |
 
 ## Configuration
 
-Each profile can be configured via environment variables:
+### Environment Templates
 
-```bash
-# Application
-APP_NAME=microservice-template
+| File | Database | Use Case |
+|------|----------|----------|
+| `env.dev.properties.template` | H2 | Local development |
+| `env.staging.properties.template` | PostgreSQL | Staging |
+| `env.prod.properties.template` | PostgreSQL | Production |
+
+### Key Variables
+
+**Development:**
+```properties
+APP_NAME=microservice-template-dev
 PORT=8080
-
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=mydb
-DB_USERNAME=user
-DB_PASSWORD=password
+DB_URL=jdbc:h2:mem:testdb
 ```
 
-## CI/CD Pipeline
-
-The template includes a complete GitHub Actions pipeline with:
-- Linting (Checkstyle, SpotBugs)
-- Testing with coverage (JaCoCo)
-- Docker build and push to GitHub Container Registry
-- Multi-environment deployment support
-
-## Docker
-
-```bash
-# Build
-docker build -t microservice-template .
-
-# Run
-docker run -p 8080:8080 \
-  -e DB_HOST=postgres \
-  -e DB_NAME=mydb \
-  microservice-template
+**Production:**
+```properties
+APP_NAME=microservice-template
+PORT=8080
+DB_HOST=prod-db.example.com
+DB_PORT=5432
+DB_NAME=microservice_prod
+DB_USERNAME=prod_user
+DB_PASSWORD=SECURE_PASSWORD
+CORS_ALLOWED_ORIGINS=https://prod-app.example.com
 ```
 
 ## Development
 
+### Commands
+
 ```bash
+# Run with profile
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
 # Run tests
 ./mvnw test
 
-# Run with specific profile
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
-
 # Build
 ./mvnw clean package
+
+# Code quality
+./mvnw checkstyle:check
+./mvnw spotbugs:check
+./mvnw jacoco:report
+```
+
+## Docker
+
+### Build & Run
+
+```bash
+docker build -t microservice-template .
+
+docker run -p 8080:8080 \
+  -e DB_HOST=postgres \
+  -e DB_NAME=mydb \
+  -e DB_USERNAME=user \
+  -e DB_PASSWORD=password \
+  -e CORS_ALLOWED_ORIGINS=https://app.example.com \
+  microservice-template
+```
+
+## CI/CD
+
+### Pipeline Includes
+
+- ✅ Linting (Checkstyle, SpotBugs)
+- ✅ Testing with coverage (JaCoCo)
+- ✅ Maven build
+- ✅ Docker build & push to GitHub Container Registry
+
+### Setup
+
+1. **Settings → Actions → General**
+2. Enable **"Read and write permissions"**
+
+## Project Structure
+
+```
+src/main/
+├── java/com/template/microservice/
+│   ├── MicroserviceApplication.java
+│   └── config/
+│       └── CorsConfig.java
+└── resources/
+    ├── application.yml                     # Base config
+    ├── application-dev.yml                 # Development
+    ├── application-test.yml                # Testing
+    ├── application-staging.yml             # Staging
+    ├── application-prod.yml                # Production
+    ├── env.dev.properties.template         # Dev env
+    ├── env.staging.properties.template     # Staging env
+    ├── env.prod.properties.template        # Prod env
+    └── db/migration/
+        └── V1__Initial_schema.sql          # Flyway migration
 ```

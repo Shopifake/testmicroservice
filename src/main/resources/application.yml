@@ -1,6 +1,4 @@
-# Base configuration - Common parameters for all profiles
-# Each profile will override what it needs
-
+# Base configuration
 spring:
   application:
     name: microservice-template
