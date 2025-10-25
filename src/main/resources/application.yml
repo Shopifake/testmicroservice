@@ -17,6 +17,14 @@ spring:
 server:
   port: 8080
 
+# SpringDoc OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
 # Actuator configuration
 management:
   endpoints:
@@ -26,6 +34,11 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
 
 # Logging configuration
 logging:

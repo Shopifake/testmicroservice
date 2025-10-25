@@ -9,7 +9,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: false
+    show-sql: true
   
   h2:
     console:
@@ -31,3 +31,4 @@ logging:
   level:
     root: WARN
     com.template.microservice: INFO
+    org.hibernate.SQL: DEBUG

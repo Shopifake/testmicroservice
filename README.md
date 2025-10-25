@@ -12,7 +12,7 @@ A production-ready Spring Boot microservice template with CI/CD pipeline, multi-
 - **CORS** configured per environment
 - **Lombok** for cleaner code
 - **Testcontainers** for integration testing
-- **GitHub Actions** CI/CD with Checkstyle, SpotBugs, JaCoCo
+- **GitHub Actions** CI/CD with Test, Checkstyle, JaCoCo
 - **Multi-stage Docker** build
 
 ## Quick Start
@@ -95,7 +95,7 @@ env:
   - name: CORS_ALLOWED_ORIGINS
     value: "https://prod-app.example.com"
   - name: CORS_ALLOW_CREDENTIALS
-    value: "true"
+    value: "false"
 ```
 
 ## Development
@@ -114,7 +114,6 @@ env:
 
 # Code quality
 ./mvnw checkstyle:check
-./mvnw spotbugs:check
 ./mvnw jacoco:report
 ```
 
